@@ -1,8 +1,15 @@
+
+<%@page import="db5.Service"%>
 <%@page import="db5.DBSTUDY"%>
-<%@page import="java.util.List"%>
 <%@page import="db5.Service2"%>
-<%@page import="java.sql.*"%>
+<%@page import="java.util.*"%>
+<%@page import="java.util.Vector"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.sql.DriverManager"%>
+<%@ page import="java.sql.Connection"%>
+<%@ page import="java.sql.Statement"%>
+<%@ page import="java.sql.ResultSet"%>
+<%@page import="java.sql.*"%>
 <!DOCTYPE html>
 
 <html>
@@ -12,30 +19,56 @@
 	<title>와이파이 정보 구하기 </title>
 
 		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script>
-        $(document).ready(function(){ 
-            $("#buttonSubmit").on('click',function(){ // 제출 버튼 이벤트 지정
-                $.ajax({
-                    url: "./save.jsp", // 목적지
-                    type: "POST", // HTTP Method
-                    data: $("#theForm").serialize(), // 전송 데이터
-                    dataType: 'text', // 전송 데이터 형식
-                    success: function(res){ // 성공 시 실행
-                        $("#result_name").html(res.name);
-                        $("#result_ph_number").html(res.ph_number);
-                        $("#result_address").html(res.address);
-                        
-                        
-              
-                        
-                    },
-                    error:function(er){ //실패 시 실행
-                        alert("실패 원인 : " + er);
-                    }
-                });
-            });
-        });
-    </script>
+	<script>
+	$(document).ready(function(){
+	    $("#wth-form").submit(function(e){
+	    e.preventDefault()
+	    const LAT = this.LAT.value
+	    const LNT = this.LNT.value
+	    $.ajax({
+	        url:"./list.jsp",
+	        type : "get",
+	        dataType: "json",
+	        error: function(err){
+	            console.errer(err.status)
+	        },
+	        success: function(result){
+	         
+	        	let api_data="";
+				$.each(,function(key, value){
+					
+					api_data+="<tr>";
+					api_data+="<td>"+ "" +"</td>";
+					api_data+="<td>"+ value.distanse +"</td>";
+					api_data+="<td>"+ value.X_SWIFI_MGR_NO +"</td>";
+					api_data+="<td>"+ value.X_SWIFI_WRDOFC  +"</td>";
+					api_data+="<td>"+ value.X_SWIFI_MAIN_NM  +"</td>";
+					api_data+="<td>"+ value.X_SWIFI_ADRES1  +"</td>";
+					api_data+="<td>"+ value.X_SWIFI_ADRES2  +"</td>";
+					api_data+="<td>"+ "" +"</td>";
+					api_data+="<td>"+ value.X_SWIFI_INSTL_TY  +"</td>"; //설치유형
+					api_data+="<td>"+ value.X_SWIFI_INSTL_MBY  +"</td>";//설치기관
+					api_data+="<td>"+ value.X_SWIFI_SVC_SE  +"</td>";//서비스구분
+					api_data+="<td>"+ value.X_SWIFI_CMCWR  +"</td>"; //망종류
+					api_data+="<td>"+ value.X_SWIFI_CNSTC_YEAR  +"</td>";//설치년도
+					api_data+="<td>"+ value.X_SWIFI_INOUT_DOOR  +"</td>";//실내외구분
+					api_data+="<td>"+ "" +"</td>"; 
+					api_data+="<td>"+ value.LNT  +"</td>";
+					api_data+="<td>"+ value.LAT  +"</td>";
+					api_data+="<td>"+ value.REG_DT  +"</td>";
+					api_data+="</tr>";
+					
+				});
+				
+				
+				//페이지단에 붙이기
+				$('#member_table').append(api_data);
+	        }      
+	    })
+	})
+	})
+
+	</script>
 <style>
  margin-top: 8px;
 
@@ -114,10 +147,12 @@ color:hotpink;
 	</head>
 	<body>
 	<%
-	 Service2 service =new Service2();
-               		 
-      List<DBSTUDY> CSV_DBList = service.list();
-             %>
+
+	Service service = new Service();
+	Vector<DBSTUDY> list = service.getAllDatas();
+	    
+	%>
+	
 <h1 span style="font-weight:bold">와이파이 정보 구하기</h1 span>
 <a href="http://localhost:8090/Api_Wifi/dataList.jsp">
 
@@ -137,9 +172,9 @@ color:hotpink;
 <h2>Open API와이파이 정보 가져오기</h2>
  
 </a>
- <form id="theForm">
-LAT : <input type="text" name="LAT">, LNT:  <input type="text" name="LNT"> <input type="submit" value="내위치가져오기">  <input id="buttonSubmit" type="button" value="근처 Wifi 정보 보기">
-</foam>
+<form id="wth-form" method="post">
+LAT : <input type="text" name="LAT">, LNT:  <input type="text" name="LNT"> <input type="submit" value="내위치가져오기"> <button id="req" type="submit"> "근처 Wifi 정보 보기" </button>
+</form>
  
 <thead>
 	 <table id="member_table">
@@ -161,19 +196,19 @@ LAT : <input type="text" name="LAT">, LNT:  <input type="text" name="LNT"> <inpu
 			<th>X좌표</th>
 			<th>Y좌표</th>
 			<th>작업일자</th>
-			
-			
 		</tr>		
 		</thead>
-		<tbody>
+	<tbody>
 		<tr>
-		
 			<%
+			for(int i =0; i<list.size(); i++)
+			{	
+				DBSTUDY dbstudy=list.get(i);  
 			
-			for(DBSTUDY dbstudy : CSV_DBList) {
 			%>
-				<tr>
-			
+				<tr>	
+				<td><%= i+1 %></td>
+				<td> <%=dbstudy.getDistance() %></td>
 				<td> <%=dbstudy.getX_SWIFI_MGR_NO() %></td>
 				<td> <%=dbstudy.getX_SWIFI_WRDOFC() %></td>
 				<td> <%=dbstudy.getX_SWIFI_MAIN_NM() %></td>
@@ -181,6 +216,7 @@ LAT : <input type="text" name="LAT">, LNT:  <input type="text" name="LNT"> <inpu
 				<td> <%=dbstudy.getX_SWIFI_ADRES2() %></td>
 				<td> <%=dbstudy.getX_SWIFI_INSTL_FLOOR() %></td>
 				<td> <%=dbstudy.getX_SWIFI_INSTL_TY() %></td>
+				<td> <%=dbstudy.getX_SWIFI_INSTL_MBY() %></td>
 				<td> <%=dbstudy.getX_SWIFI_SVC_SE() %></td>
 				<td> <%=dbstudy.getX_SWIFI_CMCWR() %></td>
 				<td> <%=dbstudy.getX_SWIFI_CNSTC_YEAR() %></td>
@@ -195,8 +231,8 @@ LAT : <input type="text" name="LAT">, LNT:  <input type="text" name="LNT"> <inpu
 			
 			%>
 		</tr>
-		</tbody>
-	 </table>
+	</tbody>
+ </table>
 
 	</body>
 </html>

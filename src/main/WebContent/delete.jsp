@@ -34,7 +34,7 @@ h2 {
 <%
 String id = request.getParameter("ID");
 
-String url = "jdbc:mariadb://172.28.72.218:3306/db3";
+String url = "jdbc:mariadb://172.17.133.134:3306/db3";
 String dbUserId = "testuser3";
 String dbPassword = "zerobase";
 

@@ -4,7 +4,7 @@ $(document).ready(function(){
 		
 		
 		//ajax옵션 설정
-		url:"http://openapi.seoul.go.kr:8088/6f6f5a416c776572353369766d6875/json/TbPublicWifiInfo/1/1000/",
+		url:"list.jsp",
 		type:"GET",
 		dataType:"json",
 		
@@ -25,7 +25,6 @@ $(document).ready(function(){
 				
 				api_data+="<tr>";
 				api_data+="<td>"+ "" +"</td>";
-				api_data+="<td>"+ value.distanse +"</td>";
 				api_data+="<td>"+ value.X_SWIFI_MGR_NO +"</td>";
 				api_data+="<td>"+ value.X_SWIFI_WRDOFC  +"</td>";
 				api_data+="<td>"+ value.X_SWIFI_MAIN_NM  +"</td>";
@@ -41,7 +40,7 @@ $(document).ready(function(){
 				api_data+="<td>"+ "" +"</td>"; 
 				api_data+="<td>"+ value.LNT  +"</td>";
 				api_data+="<td>"+ value.LAT  +"</td>";
-				api_data+="<td>"+ value.REG_DT  +"</td>";
+				api_data+="<td>"+ value.WORK_DTTM  +"</td>";
 				api_data+="</tr>";
 				
 			});

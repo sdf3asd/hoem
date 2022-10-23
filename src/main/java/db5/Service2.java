@@ -30,10 +30,10 @@ public class Service2 {
 
 	
 		try {
-			connection = DriverManager.getConnection(url, dbUserId, dbPassword);
+			connection = DriverManager.getConnection(url,dbUserId,dbPassword);
 
 			String sql = " select * " +
-				     " from db1 ";
+				     " from csv_db1 ";
 				  
 
 			preparedStatement = connection.prepareStatement(sql);
@@ -41,7 +41,7 @@ public class Service2 {
 			rs = preparedStatement.executeQuery();
 
 			while (rs.next()) {
-				
+				String distance = rs.getString("distance");
 				String x_SWIFI_MGR_NO = rs.getString("X_SWIFI_MGR_NO");
 				String x_SWIFI_WRDOFC = rs.getString("X_SWIFI_WRDOFC");
 				String x_SWIFI_MAIN_NM = rs.getString("X_SWIFI_MAIN_NM");
@@ -62,29 +62,28 @@ public class Service2 {
 
 				DBSTUDY dbstudy = new DBSTUDY();
 				
-				dbstudy.setLAT(x_SWIFI_MGR_NO);
-				dbstudy.setLNT(x_SWIFI_WRDOFC);
-				dbstudy.setREG_DT(x_SWIFI_MAIN_NM);
-				dbstudy.setID(x_SWIFI_ADRES1);
-				dbstudy.setLAT(x_SWIFI_ADRES2);
-				dbstudy.setLNT(x_SWIFI_INSTL_FLOOR);
-				dbstudy.setREG_DT(x_SWIFI_INSTL_TY);
-				dbstudy.setID(x_SWIFI_INSTL_MBY);
-				dbstudy.setLAT(x_SWIFI_SVC_SE);
-				dbstudy.setLNT(x_SWIFI_CMCWR);
-				dbstudy.setREG_DT(x_SWIFI_CNSTC_YEAR);
-				dbstudy.setID(x_SWIFI_REMARS3);
+				dbstudy.setDistance(distance);
+				dbstudy.setX_SWIFI_MGR_NO(x_SWIFI_MGR_NO);
+				dbstudy.setX_SWIFI_WRDOFC(x_SWIFI_WRDOFC);
+				dbstudy.setX_SWIFI_MAIN_NM(x_SWIFI_MAIN_NM);
+				dbstudy.setX_SWIFI_ADRES1(x_SWIFI_ADRES1);
+				dbstudy.setX_SWIFI_ADRES2(x_SWIFI_ADRES2);
+				dbstudy.setX_SWIFI_INSTL_FLOOR(x_SWIFI_INSTL_FLOOR);
+				dbstudy.setX_SWIFI_INSTL_TY(x_SWIFI_INSTL_TY);
+				dbstudy.setX_SWIFI_INSTL_MBY(x_SWIFI_INSTL_MBY);
+				dbstudy.setX_SWIFI_SVC_SE(x_SWIFI_SVC_SE);
+				dbstudy.setX_SWIFI_CMCWR(x_SWIFI_CMCWR);
+				dbstudy.setX_SWIFI_CNSTC_YEAR(x_SWIFI_CNSTC_YEAR);
+				dbstudy.setX_SWIFI_INOUT_DOOR(x_SWIFI_INOUT_DOOR);
+				dbstudy.setX_SWIFI_REMARS3(x_SWIFI_REMARS3);
 				dbstudy.setLAT(lat);
 				dbstudy.setLNT(lnt);
 				dbstudy.setREG_DT(rEG_DT);
-
 				
 				CSV_DBList.add(dbstudy);
 
-System.out.println(x_SWIFI_MGR_NO + "," + x_SWIFI_WRDOFC + "," + x_SWIFI_MAIN_NM +"," + "," + x_SWIFI_ADRES1
-+ "," + x_SWIFI_ADRES2+ "," + x_SWIFI_INSTL_FLOOR+ "," + x_SWIFI_INSTL_TY+ "," + x_SWIFI_INSTL_MBY+ "," + x_SWIFI_SVC_SE+ "," + x_SWIFI_CMCWR
-+ "," + x_SWIFI_CNSTC_YEAR+ "," + x_SWIFI_INOUT_DOOR+ "," + "," + x_SWIFI_REMARS3+ "," + lat+ "," + lnt+ "," + rEG_DT);
-
+System.out.println(x_SWIFI_MGR_NO + "," + x_SWIFI_WRDOFC + "," + x_SWIFI_MAIN_NM +"," + x_SWIFI_ADRES1+ "," + x_SWIFI_ADRES2+ "," + x_SWIFI_INSTL_FLOOR+ "," + x_SWIFI_INSTL_TY+ "," + x_SWIFI_INSTL_MBY+ "," + x_SWIFI_SVC_SE+ "," + x_SWIFI_CMCWR+ "," + x_SWIFI_CNSTC_YEAR+ "," + x_SWIFI_INOUT_DOOR+ "," + x_SWIFI_REMARS3+ "," + lat+ "," + lnt+ "," + rEG_DT);
+			
 			}
 
 		} catch (SQLException e) {

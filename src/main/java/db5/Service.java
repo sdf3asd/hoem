@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class Service {
 
@@ -15,7 +16,7 @@ public class Service {
 	    
 	List<DBSTUDY> OUTPUTList = new ArrayList<>();    
 	    
-	String url="jdbc:mariadb://172.20.15.148:3306/db3";
+	String url="jdbc:mariadb://172.17.133.134:3306/db3";
         String dbUserId="testuser3";
         String dbPassword="zerobase";
 
@@ -35,7 +36,7 @@ public class Service {
         try {
              connection =DriverManager.getConnection(url,dbUserId,dbPassword);
 
-            String sql = " select ID, LAT, LNT, REG_DT " +
+            String sql = " select * " +
                     " from OUTPUT "+
                     " where ID < 20 "
                     + " order by ID DESC ";
@@ -98,8 +99,111 @@ public class Service {
         return OUTPUTList;
 
     }
+    
+    public Vector<DBSTUDY> getAllDatas() {
+	    
+	    Vector<DBSTUDY> list = new Vector<DBSTUDY>();
+	    String url="jdbc:mariadb://172.17.133.134:3306/db3";
+	        String dbUserId="testuser3";
+	        String dbPassword="zerobase";
 
-     public void register(DBSTUDY dbstudy){  String url="jdbc:mariadb://172.28.72.218:3306/db3";
+	        try {
+	            Class.forName("org.mariadb.jdbc.Driver");
+	        } catch (ClassNotFoundException e) {
+	            e.printStackTrace();
+	        }
+
+
+
+	        PreparedStatement preparedStatement =null;
+	        Connection connection =null;
+	        ResultSet rs= null;
+
+
+	        try {
+	             connection =DriverManager.getConnection(url,dbUserId,dbPassword);
+
+	    
+	        String sql = " select * " +
+	                        " from csv_db1 "+
+	                        " where LAT = ? and LNT = ? "
+	                        + " order by LAT DESC ";
+	        preparedStatement =connection.prepareStatement(sql);
+	        
+
+	            rs= preparedStatement.executeQuery();
+
+	            while(rs.next()){
+	                String id =  rs.getString("ID");
+	                String lat =  rs.getString("LAT");
+	                String lnt =  rs.getString("LNT");
+	                String rEG_DT =  rs.getString("REG_DT");
+
+	                DBSTUDY dbstudy = new DBSTUDY();
+	                dbstudy.getDistance();
+			dbstudy.getX_SWIFI_MGR_NO();
+			dbstudy.getX_SWIFI_WRDOFC();
+			dbstudy.getX_SWIFI_MAIN_NM();
+			dbstudy.getX_SWIFI_ADRES1();
+			dbstudy.getX_SWIFI_ADRES2();
+			dbstudy.getX_SWIFI_INSTL_FLOOR();
+			dbstudy.getX_SWIFI_INSTL_TY();
+			dbstudy.getX_SWIFI_INSTL_MBY();
+			dbstudy.getX_SWIFI_SVC_SE();
+			dbstudy.getX_SWIFI_CMCWR();
+			dbstudy.getX_SWIFI_CNSTC_YEAR();
+			dbstudy.getX_SWIFI_INOUT_DOOR();
+			dbstudy.getX_SWIFI_REMARS3();
+			dbstudy.getLAT();
+			dbstudy.getLNT();
+	 		dbstudy.getREG_DT();
+				
+	                list.add(dbstudy);
+	                
+
+	            }
+
+
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }finally {
+
+	            try{
+
+	                if(rs != null && !rs.isClosed()){
+	                    rs.close();
+	                }
+	            }catch(SQLException e){
+	                e.printStackTrace();
+	            }
+
+	            try{
+	                if(preparedStatement != null && !preparedStatement.isClosed()){
+	                    preparedStatement.close();
+	                }
+	            }catch(SQLException e){
+	                e.printStackTrace();
+	            }
+
+	            try{
+	                if(connection !=null && !connection.isClosed()){
+	                    connection.close();
+	                }
+	            }catch (SQLException e){
+	                e.printStackTrace();
+	            }
+	        }
+
+	        return list;
+
+	    }
+	    
+    
+    
+    
+    
+
+     public void register(DBSTUDY dbstudy){  String url="jdbc:mariadb://172.17.133.134:3306/db3";
          String dbUserId="testuser3";
          String dbPassword="zerobase";
 
